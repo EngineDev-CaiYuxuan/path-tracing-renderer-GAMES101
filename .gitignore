@@ -1,9 +1,11 @@
 #构建输出
+.vs/
 build/
 bin/
 obj/
 *.exe/
 *.out/
+CMakeSettings.json
 #临时文件
 *.tmp
 *.bak
