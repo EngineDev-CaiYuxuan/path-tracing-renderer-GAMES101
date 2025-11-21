@@ -19,7 +19,7 @@
 ### 1. 克隆仓库
 
 ```Bash
-git clone https://github.com/Engine-dev/path-tracing-renderer.git
+git clone https://github.com/EngineDev-Caiyuxuan/path-tracing-renderer.git
 cd path-tracing-renderer
 ```
 
@@ -91,9 +91,9 @@ Vector3f energy_new = ray.energy * f_r / prob; // 能量衰减+加权补偿
 
 ### 2. 渲染效果对比
 
-| 纯轮盘赌（SPP=128）                                          | 双优化（SPP=128）                                            |
-| ------------------------------------------------------------ | ------------------------------------------------------------ |
-| ![image-20251122013309243](C:\Users\24668\AppData\Roaming\Typora\typora-user-images\image-20251122013309243.png) | ![image-20251122013230372](C:\Users\24668\AppData\Roaming\Typora\typora-user-images\image-20251122013230372.png) |
+| 纯轮盘赌（SPP=128）             | 双优化（SPP=128）                   |
+| ------------------------------- | ----------------------------------- |
+| ![纯轮盘赌](image/纯轮盘赌.png) | ![双优化策略](image/双优化策略.png) |
 
 ## 待改进方向
 
