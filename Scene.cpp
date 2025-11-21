@@ -76,11 +76,19 @@ Vector3f Scene::castRay(const Ray &ray, int depth) const
         ref_color += inter.m->getEmission();
     }
 
-    ref_color += compute_directlighting(Ray(ray), inter);
-
-    if (depth >= 6 || get_random_float() > this->RussianRoulette)
+    float max_energy = std::max(std::max(ray.energy.x, ray.energy.y), ray.energy.z);
+    if (max_energy < 0.005f)
     {
         return ref_color;
+    }
+
+    ref_color += compute_directlighting(Ray(ray), inter);
+
+    float prob = std::max<float>(max_energy, this->RussianRoulette);
+    Vector3f current_attenuation = ray.energy / prob;
+    if (depth >= 6 || get_random_float() > prob)
+    {
+        return ref_color * current_attenuation;
     }
 
     Vector3f out_dir = inter.m->sample(normalize(ray.direction), normalize(inter.normal));
@@ -88,8 +96,9 @@ Vector3f Scene::castRay(const Ray &ray, int depth) const
     Vector3f f_r = inter.m->eval(normalize(ray.direction), normalize(out_dir), normalize(inter.normal));
     float cos_alpha = dotProduct(normalize(out_dir), normalize(inter.normal));
 
-    Vector3f L_indir = castRay(Ray(inter.coords + out_dir * EPSILON, out_dir), ++depth)
-                       * cos_alpha * f_r / (pdf * RussianRoulette);
+    Vector3f energy_new = ray.energy * f_r / prob;//
+    Vector3f L_indir = castRay(Ray(inter.coords + out_dir * EPSILON, out_dir, 0, energy_new), ++depth)
+                       * cos_alpha / pdf;
     ref_color += L_indir;
 
     return ref_color;
